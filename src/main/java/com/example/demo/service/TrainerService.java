@@ -2,11 +2,13 @@ package com.example.demo.service;
 
 import com.example.demo.dto.Trainer;
 import com.example.demo.entity.TrainerEntity;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.TrainerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,5 +33,13 @@ public class TrainerService {
         }
         return trainers.stream()
                 .map(TrainerEntity::toTrainer).collect(Collectors.toList());
+    }
+
+    public void deleteTrainer(long trainerId) {
+        Optional<TrainerEntity> trainer = trainerRepository.findById(trainerId);
+        if (!trainer.isPresent())
+            throw new ResourceNotFoundException("can not find basic info of trainer with id is " + trainerId);
+
+        trainerRepository.deleteById(trainerId);
     }
 }

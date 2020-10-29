@@ -2,6 +2,7 @@ package com.example.demo.serviceTests;
 
 import com.example.demo.dto.Trainer;
 import com.example.demo.entity.TrainerEntity;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.TrainerRepository;
 import com.example.demo.service.TrainerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +14,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -63,6 +67,32 @@ public class TrainerServiceTest {
                 when(trainerRepository.findAllAndGroupedIsFalse(0)).thenReturn(trainers);
                 List<Trainer> trainersResponse = trainerService.getTrainers(false);
                 assertEquals("mock trainer name", trainersResponse.get(0).getName());
+            }
+        }
+    }
+
+    @Nested
+    class DeleteTrainer {
+
+        @Nested
+        class WhenTrainerIdIsExisted {
+
+            @Test
+            void should_delete_success() {
+                when(trainerRepository.findById(1L)).thenReturn(Optional.of(trainerEntity));
+                trainerService.deleteTrainer(1L);
+                verify(trainerRepository).deleteById(1L);
+            }
+        }
+
+        @Nested
+        class WhenTraineeIdIsUnExisted {
+
+            @Test
+            void should_throw_exception() {
+                when(trainerRepository.findById(1L)).thenReturn(Optional.empty());
+                ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class, () -> trainerService.deleteTrainer(1L));
+                assertEquals("can not find basic info of trainer with id is " + 1L, resourceNotFoundException.getMessage());
             }
         }
     }

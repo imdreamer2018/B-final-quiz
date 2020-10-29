@@ -62,12 +62,14 @@ public class GroupService {
         }
 
         for (int i = 0; i < trainerEntities.size(); i += 2) {
-            trainerEntities.get(i).setGrouped(true);
-            trainerRepository.save(trainerEntities.get(i));
-            trainerEntities.get(i + 1).setGrouped(true);
-            trainerRepository.save(trainerEntities.get(i + 1));
-            groupEntities.get(i / 2).getTrainers().add(trainerEntities.get(i));
-            groupEntities.get(i / 2).getTrainers().add(trainerEntities.get(i + 1));
+            if (i + 1 < trainerEntities.size()) {
+                trainerEntities.get(i).setGrouped(true);
+                trainerRepository.save(trainerEntities.get(i));
+                trainerEntities.get(i + 1).setGrouped(true);
+                trainerRepository.save(trainerEntities.get(i + 1));
+                groupEntities.get(i / 2).getTrainers().add(trainerEntities.get(i));
+                groupEntities.get(i / 2).getTrainers().add(trainerEntities.get(i + 1));
+            }
         }
 
         groupRepository.saveAll(groupEntities);

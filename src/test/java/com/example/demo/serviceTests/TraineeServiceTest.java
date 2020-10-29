@@ -56,7 +56,7 @@ class TraineeServiceTest {
     }
 
     @Nested
-    class FindTrainee {
+    class FindTrainees {
 
         @Nested
         class WhenGroupedIsFalse {

@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.Trainee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,4 +28,12 @@ public class TraineeEntity {
     private String name;
 
     private Boolean grouped;
+
+    public static Trainee toTrainee(TraineeEntity traineeEntity) {
+        return Trainee.builder()
+                .id(traineeEntity.getId())
+                .name(traineeEntity.getName())
+                .grouped(traineeEntity.getGrouped())
+                .build();
+    }
 }

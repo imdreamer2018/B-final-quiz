@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class GroupService {
 
     private static final String GROUP_NAME = "组";
+    private static final int GROUP_TRAINER_NUM = 2;
 
     private final GroupRepository groupRepository;
     private final TraineeRepository traineeRepository;
@@ -35,14 +36,14 @@ public class GroupService {
         groupRepository.deleteAll();
         List<TrainerEntity> trainerEntities = trainerRepository.findAll();
         List<TraineeEntity> traineeEntities = traineeRepository.findAll();
-        if (trainerEntities.size() < 2)
+        if (trainerEntities.size() < GROUP_TRAINER_NUM)
             throw new BadRequestException("trainer num less than 2!");
         Collections.shuffle(traineeEntities);
         Collections.shuffle(trainerEntities);
 
         List<GroupEntity> groupEntities = new ArrayList<>();
         AtomicLong groupIndex = new AtomicLong(0L);
-        int groupNum = trainerEntities.size() / 2;
+        int groupNum = trainerEntities.size() / GROUP_TRAINER_NUM;
 
         for (TraineeEntity traineeEntity: traineeEntities) {
             List<TrainerEntity> trainers = new ArrayList<>();
@@ -61,14 +62,14 @@ public class GroupService {
                 groupIndex.set(0L);
         }
 
-        for (int i = 0; i < trainerEntities.size(); i += 2) {
+        for (int i = 0; i < trainerEntities.size(); i += GROUP_TRAINER_NUM) {
             if (i + 1 < trainerEntities.size()) {
                 trainerEntities.get(i).setGrouped(true);
                 trainerRepository.save(trainerEntities.get(i));
                 trainerEntities.get(i + 1).setGrouped(true);
                 trainerRepository.save(trainerEntities.get(i + 1));
-                groupEntities.get(i / 2).getTrainers().add(trainerEntities.get(i));
-                groupEntities.get(i / 2).getTrainers().add(trainerEntities.get(i + 1));
+                groupEntities.get(i / GROUP_TRAINER_NUM).getTrainers().add(trainerEntities.get(i));
+                groupEntities.get(i / GROUP_TRAINER_NUM).getTrainers().add(trainerEntities.get(i + 1));
             }
         }
 

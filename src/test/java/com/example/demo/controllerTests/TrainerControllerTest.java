@@ -16,9 +16,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,6 +67,26 @@ public class TrainerControllerTest {
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.name", is("mock trainer name")));
             verify(trainerService).createTrainer(trainer);
+        }
+    }
+
+    @Nested
+    class FindTrainers {
+
+        @Nested
+        class WhenGroupedIsFalse {
+
+            @Test
+            void should_return_trainers_info() throws Exception {
+                List<Trainer> trainers = new ArrayList<>();
+                trainers.add(trainer);
+                when(trainerService.getTrainers(false)).thenReturn(trainers);
+                mockMvc.perform(get("/trainers?grouped=false")
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$[0].name", is("mock trainer name")));
+                verify(trainerService).getTrainers(false);
+            }
         }
     }
 }

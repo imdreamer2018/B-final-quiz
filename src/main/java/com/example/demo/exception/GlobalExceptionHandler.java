@@ -23,6 +23,13 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResult);
     }
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResult> handle(BadRequestException e) {
+        ErrorResult errorResult = ErrorResult.builder()
+                .message(e.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResult);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResult> handle(MethodArgumentNotValidException e) {

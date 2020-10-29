@@ -39,7 +39,7 @@ public class TrainerService {
         Optional<TrainerEntity> trainer = trainerRepository.findById(trainerId);
         if (!trainer.isPresent())
             throw new ResourceNotFoundException("can not find basic info of trainer with id is " + trainerId);
-
+        trainerRepository.deleteForeignKey(trainerId);
         trainerRepository.deleteById(trainerId);
     }
 }

@@ -40,7 +40,7 @@ public class TraineeService {
         Optional<TraineeEntity> trainee = traineeRepository.findById(traineeId);
         if (!trainee.isPresent())
             throw new ResourceNotFoundException("can not find basic info of trainee with id is " + traineeId);
-
+        traineeRepository.deleteForeignKey(traineeId);
         traineeRepository.deleteById(traineeId);
 
     }

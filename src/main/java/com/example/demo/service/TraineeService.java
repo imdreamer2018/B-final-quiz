@@ -5,6 +5,11 @@ import com.example.demo.entity.TraineeEntity;
 import com.example.demo.repository.TraineeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Service
 public class TraineeService {
 
@@ -19,5 +24,14 @@ public class TraineeService {
         traineeRepository.save(traineeEntity);
         trainee.setId(traineeEntity.getId());
         return trainee;
+    }
+
+    public List<Trainee> getTrainees(boolean grouped) {
+        List<TraineeEntity> trainees = new ArrayList<>();
+        if (!grouped) {
+            trainees = traineeRepository.findAllAndGroupedIsFalse(0);
+        }
+        return trainees.stream()
+                .map(TraineeEntity::toTrainee).collect(Collectors.toList());
     }
 }

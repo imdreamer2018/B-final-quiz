@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class TrainerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Trainer createTrainer(@RequestBody Trainer trainer) {
+    public Trainer createTrainer(@RequestBody @Valid Trainer trainer) {
         return trainerService.createTrainer(trainer);
     }
 

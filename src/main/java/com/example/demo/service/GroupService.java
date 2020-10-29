@@ -75,4 +75,7 @@ public class GroupService {
                 .map(GroupEntity::toGroup).collect(Collectors.toList());
     }
 
+    public List<Group> getGroups() {
+        return groupRepository.findAll().stream().map(GroupEntity::toGroup).collect(Collectors.toList());
+    }
 }

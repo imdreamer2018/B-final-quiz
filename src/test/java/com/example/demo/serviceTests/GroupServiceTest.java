@@ -1,6 +1,7 @@
 package com.example.demo.serviceTests;
 
 import com.example.demo.dto.Group;
+import com.example.demo.entity.GroupEntity;
 import com.example.demo.entity.TraineeEntity;
 import com.example.demo.entity.TrainerEntity;
 import com.example.demo.repository.GroupRepository;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @ExtendWith(MockitoExtension.class)
-public class GroupServiceTest {
+class GroupServiceTest {
 
     private GroupService groupService;
 
@@ -39,23 +40,35 @@ public class GroupServiceTest {
 
     private List<TrainerEntity> trainerEntities = new ArrayList<>();
 
+    private List<GroupEntity> groupEntities = new ArrayList<>();
+
+    private List<Group> groups = new ArrayList<>();
+
     @BeforeEach
     void setUp() {
         initMocks(this);
         groupService = new GroupService(groupRepository, traineeRepository, trainerRepository);
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 4; i++) {
             traineeEntities.add(TraineeEntity.builder()
                     .name("mock name"+ i)
                     .grouped(false)
                     .build());
         }
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 4; i++) {
             trainerEntities.add(TrainerEntity.builder()
                     .name("mock trainer name"+ i)
                     .grouped(false)
                     .build());
         }
+        GroupEntity groupEntity = GroupEntity.builder()
+                .name("mock group")
+                .trainers(trainerEntities)
+                .trainees(traineeEntities)
+                .build();
+        groupEntities.add(groupEntity);
+        groups.add(GroupEntity.toGroup(groupEntity));
+
     }
 
     @Nested
@@ -63,10 +76,22 @@ public class GroupServiceTest {
 
         @Test
         void should_return_groups_info() {
-            when(traineeRepository.findAllAndGroupedIsFalse(0)).thenReturn(traineeEntities);
-            when(trainerRepository.findAllAndGroupedIsFalse(0)).thenReturn(trainerEntities);
+            when(traineeRepository.findAll()).thenReturn(traineeEntities);
+            when(trainerRepository.findAll()).thenReturn(trainerEntities);
             List<Group> groups = groupService.autoGrouping();
-            assertEquals(4, groups.size());
+            assertEquals(2, groups.size());
+        }
+    }
+
+    @Nested
+    class GetGroups {
+
+        @Test
+        void should_return_groups_info() {
+            when(groupRepository.findAll()).thenReturn(groupEntities);
+            List<Group> groupsResponse = groupService.getGroups();
+            assertEquals(1, groupsResponse.size());
+            assertEquals("mock group", groupsResponse.get(0).getName());
         }
     }
 }

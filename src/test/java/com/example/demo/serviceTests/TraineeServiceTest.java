@@ -2,6 +2,7 @@ package com.example.demo.serviceTests;
 
 import com.example.demo.dto.Trainee;
 import com.example.demo.entity.TraineeEntity;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.TraineeRepository;
 import com.example.demo.service.TraineeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,13 +14,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @ExtendWith(MockitoExtension.class)
-public class TraineeServiceTest {
+class TraineeServiceTest {
 
     private TraineeService traineeService;
 
@@ -67,6 +71,32 @@ public class TraineeServiceTest {
             }
 
 
+        }
+    }
+
+    @Nested
+    class DeleteTrainee {
+
+        @Nested
+        class WhenTraineeIdIsExisted {
+
+            @Test
+            void should_delete_success() {
+                when(traineeRepository.findById(1L)).thenReturn(Optional.of(traineeEntity));
+                traineeService.deleteTrainee(1L);
+                verify(traineeRepository).deleteById(1L);
+            }
+        }
+
+        @Nested
+        class WhenTraineeIdIsUnExisted {
+
+            @Test
+            void should_throw_exception() {
+                when(traineeRepository.findById(1L)).thenReturn(Optional.empty());
+                ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class, () -> traineeService.deleteTrainee(1L));
+                assertEquals("can not find basic info of trainee with id is " + 1L, resourceNotFoundException.getMessage());
+            }
         }
     }
 

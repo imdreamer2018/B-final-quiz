@@ -44,7 +44,7 @@ public class TraineeServiceTest {
     class CreateTrainee {
 
             @Test
-            void shouldReturnTraineeInfo() {
+            void should_return_trainee_info() {
                 Trainee traineeResponse = traineeService.createTrainee(trainee);
                 assertEquals("mock name", traineeResponse.getName());
             }

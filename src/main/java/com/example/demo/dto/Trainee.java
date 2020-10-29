@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class Trainee {
 
     private Long id;
-    @NotNull
+    @NotNull(message = "trainee name can not empty")
     private String name;
     @JsonIgnore
     private boolean grouped = false;

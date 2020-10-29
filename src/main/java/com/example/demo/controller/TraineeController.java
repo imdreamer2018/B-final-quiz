@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.Trainee;
 import com.example.demo.service.TraineeService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
+@Validated
 @RequestMapping(value = "/trainees")
 public class TraineeController {
 
@@ -39,7 +43,10 @@ public class TraineeController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTrainee(@PathVariable(name = "id") Long traineeId) {
+    public void deleteTrainee(
+            @NotNull(message = "trainee id can not be null")
+            @DecimalMin(value = "1", message = "trainee id muse be number and greater than 1")
+            @PathVariable(name = "id") Long traineeId) {
         traineeService.deleteTrainee(traineeId);
     }
 

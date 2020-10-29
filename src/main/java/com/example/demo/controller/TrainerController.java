@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -39,7 +41,10 @@ public class TrainerController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTrainer(@PathVariable(name = "id") Long trainerId) {
+    public void deleteTrainer(
+            @NotNull(message = "trainer id can not be null")
+            @DecimalMin(value = "1", message = "trainer id muse be number and greater than 1")
+            @PathVariable(name = "id") Long trainerId) {
         trainerService.deleteTrainer(trainerId);
     }
 }

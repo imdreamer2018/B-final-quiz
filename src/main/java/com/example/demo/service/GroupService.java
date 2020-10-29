@@ -4,6 +4,7 @@ import com.example.demo.dto.Group;
 import com.example.demo.entity.GroupEntity;
 import com.example.demo.entity.TraineeEntity;
 import com.example.demo.entity.TrainerEntity;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.GroupRepository;
 import com.example.demo.repository.TraineeRepository;
 import com.example.demo.repository.TrainerRepository;
@@ -32,8 +33,10 @@ public class GroupService {
 
     public List<Group> autoGrouping() {
         groupRepository.deleteAll();
-        List<TraineeEntity> traineeEntities = traineeRepository.findAllAndGroupedIsFalse(0);
-        List<TrainerEntity> trainerEntities = trainerRepository.findAllAndGroupedIsFalse(0);
+        List<TrainerEntity> trainerEntities = trainerRepository.findAll();
+        List<TraineeEntity> traineeEntities = traineeRepository.findAll();
+        if (trainerEntities.size() < 2)
+            throw new BadRequestException("trainer num less than 2!");
         Collections.shuffle(traineeEntities);
         Collections.shuffle(trainerEntities);
 
@@ -52,7 +55,7 @@ public class GroupService {
             traineeRepository.save(traineeEntity);
             groupEntities.get(Math.toIntExact(groupIndex.get())).setId(groupIndex.get() + 1);
             groupEntities.get(Math.toIntExact(groupIndex.get())).setName(groupIndex.get() + 1 + GROUP_NAME);
-            groupEntities.get(Math.toIntExact(groupIndex.get())).getTraineeEntities().add(traineeEntity);
+            groupEntities.get(Math.toIntExact(groupIndex.get())).getTrainees().add(traineeEntity);
             groupIndex.incrementAndGet();
             if (groupIndex.get() == groupNum)
                 groupIndex.set(0L);
@@ -63,8 +66,8 @@ public class GroupService {
             trainerRepository.save(trainerEntities.get(i));
             trainerEntities.get(i + 1).setGrouped(true);
             trainerRepository.save(trainerEntities.get(i + 1));
-            groupEntities.get(i / 2).getTrainerEntities().add(trainerEntities.get(i));
-            groupEntities.get(i / 2).getTrainerEntities().add(trainerEntities.get(i + 1));
+            groupEntities.get(i / 2).getTrainers().add(trainerEntities.get(i));
+            groupEntities.get(i / 2).getTrainers().add(trainerEntities.get(i + 1));
         }
 
         groupRepository.saveAll(groupEntities);

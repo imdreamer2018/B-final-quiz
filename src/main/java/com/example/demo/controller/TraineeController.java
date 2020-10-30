@@ -43,6 +43,7 @@ public class TraineeController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    // TODO GTB-完成度: + 删除时对id也进行了参数校验，不错
     public void deleteTrainee(
             @NotNull(message = "trainee id can not be null")
             @DecimalMin(value = "1", message = "trainee id muse be number and greater than 1")

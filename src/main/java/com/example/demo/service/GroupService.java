@@ -26,12 +26,14 @@ public class GroupService {
     private final TraineeRepository traineeRepository;
     private final TrainerRepository trainerRepository;
 
+    // TODO GTB-工程实践: - 过长的代码，应该及时换行
     public GroupService(GroupRepository groupRepository, TraineeRepository traineeRepository, TrainerRepository trainerRepository) {
         this.groupRepository = groupRepository;
         this.traineeRepository = traineeRepository;
         this.trainerRepository = trainerRepository;
     }
 
+    // TODO GTB-工程实践: - 长方法，可以抽成多个方法提高可读性
     public List<Group> autoGrouping() {
         groupRepository.deleteAll();
         List<TrainerEntity> trainerEntities = trainerRepository.findAll();

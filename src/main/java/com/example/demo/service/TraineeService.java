@@ -22,6 +22,7 @@ public class TraineeService {
 
     public Trainee createTrainee(Trainee trainee) {
         TraineeEntity traineeEntity = Trainee.toTraineeEntity(trainee);
+        // TODO GTB-知识点: - save方法可以直接返回有id的trainee对象
         traineeRepository.save(traineeEntity);
         trainee.setId(traineeEntity.getId());
         return trainee;
@@ -38,8 +39,10 @@ public class TraineeService {
 
     public void deleteTrainee(long traineeId) {
         Optional<TraineeEntity> trainee = traineeRepository.findById(traineeId);
+        // TODO GTB-知识点: - 可以使用orElseThrow方法
         if (!trainee.isPresent())
             throw new ResourceNotFoundException("can not find basic info of trainee with id is " + traineeId);
+        // TODO GTB-工程实践: - deleteForeignKey方法不需要
         traineeRepository.deleteForeignKey(traineeId);
         traineeRepository.deleteById(traineeId);
 

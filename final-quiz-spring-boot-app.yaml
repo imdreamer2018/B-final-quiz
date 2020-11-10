@@ -1,0 +1,39 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: final-quiz-spring-boot-app-service
+spec:
+  type: NodePort
+  selector:
+    app: final-quiz-spring-boot-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      nodePort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: final-quiz-spring-boot-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: final-quiz-spring-boot-app
+  template:
+    metadata:
+      labels:
+        app: final-quiz-spring-boot-app
+    spec:
+      containers:
+        - name: final-quiz-spring-boot-app
+          image: final_quiz_spring_boot_app:v1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: FINAL_QUIZ_MYSQL_URL
+              value: jdbc:mysql://mysql:3306/final_quiz?characterEncoding=utf8&characterSetResults=utf8
+            - name: FINAL_QUIZ_MYSQL_ROOT_USERNAME
+              value: root
+            - name: FINAL_QUIZ_MYSQL_ROOT_PASSWORD
+              value: password

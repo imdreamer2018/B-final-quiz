@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: final-quiz-spring-boot-app
-          image: imdreamer/final-quiz-spring-boot-app:v1
+          image: imdreamer/final-quiz-spring-boot-app:v1.0
           ports:
             - containerPort: 8080
           env:

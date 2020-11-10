@@ -2,8 +2,8 @@ version: '3'
 services:
   web:
     build: .
-    image: final_quiz_spring_boot_app:v1.0
-    container_name: final_quiz_spring_boot_app
+    image: final-quiz-spring-boot-app:v1.0
+    container_name: final-quiz-spring-boot-app
     restart: always
     ports:
       - "8080:8080"

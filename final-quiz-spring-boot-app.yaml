@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: final-quiz-spring-boot-app-service
+  namespace: final-quiz
 spec:
   type: NodePort
   selector:
@@ -15,6 +16,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: final-quiz-spring-boot-app-deployment
+  namespace: final-quiz
 spec:
   replicas: 1
   selector:

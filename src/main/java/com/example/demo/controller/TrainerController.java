@@ -30,6 +30,11 @@ public class TrainerController {
         this.trainerService = trainerService;
     }
 
+    @GetMapping("/hello")
+    public String helloK8s() {
+        return "hello k8s!";
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Trainer createTrainer(@RequestBody @Valid Trainer trainer) {

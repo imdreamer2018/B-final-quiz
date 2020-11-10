@@ -8,9 +8,9 @@ spring:
     hibernate:
       ddl-auto: create
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/final_quiz?characterEncoding=utf8&characterSetResults=utf8
-    username: root
-    password: password
+    url: ${FINAL_QUIZ_MYSQL_URl:jdbc:mysql://127.0.0.1:3306/final_quiz?characterEncoding=utf8&characterSetResults=utf8}
+    username: ${FINAL_QUIZ_MYSQL_ROOT_USERNAME:root}
+    password: ${FINAL_QUIZ_MYSQL_ROOT_PASSWORD:password}
     driver-class-name: com.mysql.jdbc.Driver
 logging:
   level:

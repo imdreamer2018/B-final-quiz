@@ -7,8 +7,6 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    depends_on:
-      - mysql
     environment:
       FINAL_QUIZ_MYSQL_URL: jdbc:mysql://mysql:3306/final_quiz?characterEncoding=utf8&characterSetResults=utf8
       FINAL_QUIZ_MYSQL_ROOT_USERNAME: root

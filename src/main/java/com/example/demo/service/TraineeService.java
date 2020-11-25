@@ -4,6 +4,8 @@ import com.example.demo.dto.Trainee;
 import com.example.demo.entity.TraineeEntity;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.TraineeRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,6 +38,13 @@ public class TraineeService {
         return trainees.stream()
                 .map(TraineeEntity::toTrainee).collect(Collectors.toList());
     }
+
+    public List<Trainee> getTraineesPage(Pageable pageable) {
+        Page<TraineeEntity> trainees = traineeRepository.findAll(pageable);
+        return trainees.stream()
+                .map(TraineeEntity::toTrainee).collect(Collectors.toList());
+    }
+
 
     public void deleteTrainee(long traineeId) {
         Optional<TraineeEntity> trainee = traineeRepository.findById(traineeId);

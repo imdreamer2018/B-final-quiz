@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.Trainee;
 import com.example.demo.service.TraineeService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,6 +41,11 @@ public class TraineeController {
     @GetMapping
     public List<Trainee> getTrainees(@RequestParam(required = false) boolean grouped) {
         return traineeService.getTrainees(grouped);
+    }
+
+    @GetMapping("/test")
+    public List<Trainee> getTraineesPage(@PageableDefault(value = 5) Pageable pageable) {
+        return traineeService.getTraineesPage(pageable);
     }
 
     @DeleteMapping("/{id}")
